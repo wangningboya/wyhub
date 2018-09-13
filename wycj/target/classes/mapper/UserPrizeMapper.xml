@@ -37,8 +37,10 @@
         select count(*)
         FROM userprize up,account a,prize p
         where up.ISDELETE=0 AND up.USERID=a.USERID AND up.PRIZEID=p.PRIZEID
-        <if test="params.userId!=null and params.userId!=''">
-            AND a.USERID=#{params.userId}
+        <if test="params!=null">
+            <if test="params.userId!=null and params.userId!=''">
+                AND a.USERID=#{params.userId}
+            </if>
         </if>
     </select>
 </mapper>

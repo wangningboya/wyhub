@@ -65,7 +65,8 @@
 		<property name="dataSource" ref="dataSource"/>
 		<!-- 加载sql映射文件 -->
 		<property name="mapperLocations" value="classpath:mapper/*.xml"/>
-
+		<!-- 自动扫描mapping.xml文件 -->
+		<property name="configLocation" value="classpath:mybatisConfig.xml"></property>
 		<!--<property name="typeAliasesPackage" value="cn.wy.entity" />-->
 
 		<!-- 引入插件 -->

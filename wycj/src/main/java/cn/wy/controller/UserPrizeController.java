@@ -159,6 +159,7 @@ public class UserPrizeController {
         List<UserPrizeDto> userPrizesList=new ArrayList<>();
         userPrizesList=userPrizeService.findUserPrizeDtoListByUserId(page);
         page.setRows(userPrizesList);
+        System.out.println("ssssss"+userPrizeService.count(page));
         page.setTotal(userPrizeService.count(page));
 
         Map<String, Object> result=new HashMap<String, Object>();
