@@ -130,6 +130,10 @@ public class UserPrizeController {
         List<UserPrizeDto> userPrizesList=new ArrayList<>();
         userPrizesList=userPrizeService.findUserPrizeDtoList(page);
         page.setRows(userPrizesList);
+        System.out.println("wwwwww"+userPrizeService.count(page));
+        System.out.println("1212");
+        System.out.println(userPrizeService.count(page));
+        System.out.println("8989");
         page.setTotal(userPrizeService.count(page));
 
         Map<String, Object> result=new HashMap<String, Object>();
@@ -159,6 +163,7 @@ public class UserPrizeController {
         List<UserPrizeDto> userPrizesList=new ArrayList<>();
         userPrizesList=userPrizeService.findUserPrizeDtoListByUserId(page);
         page.setRows(userPrizesList);
+        System.out.println("ssssss"+userPrizeService.count(page));
         page.setTotal(userPrizeService.count(page));
 
         Map<String, Object> result=new HashMap<String, Object>();
