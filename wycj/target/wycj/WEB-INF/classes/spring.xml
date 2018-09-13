@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+
+    <!-- 开启springioc注解功能 -->
+    <!-- base-package:ioc注解的类所在包 -->
+    <context:component-scan base-package="cn.wy"/>
+
+	<!--加载jdbc.properties-->
+	<context:property-placeholder location="classpath:jdbc.properties"/>
+	
+
+	<!--&lt;!&ndash;定义别名&ndash;&gt; -->
+	<!--<typeAliases>-->
+		<!--&lt;!&ndash;type: 需要映射的类型&ndash;&gt;-->
+		<!--&lt;!&ndash;alias： 别名&ndash;&gt;-->
+		<!--<typeAlias type="cn.sm1234.domain.Customer" alias="customer"/>-->
+	<!--</typeAliases>-->
+
+	<!--&lt;!&ndash; 数据库环境 &ndash;&gt;-->
+	<!--<environments default="develop">-->
+		<!--<environment id="develop">-->
+			<!--&lt;!&ndash; jDBC事务管理 &ndash;&gt;-->
+			<!--<transactionManager type="JDBC"/>-->
+			<!--&lt;!&ndash; 连接池配置 &ndash;&gt;-->
+			<!--&lt;!&ndash; -->
+				<!--POOLED:代表使用mybatis内置连接池（*）-->
+				<!--UNPOOLED:代表不适用连接池-->
+			 <!--&ndash;&gt;-->
+			<!--<dataSource type="POOLED">-->
+				<!--<property name="driver" value="${jdbc.driver}"/>-->
+				<!--<property name="url" value="${jdbc.url}"/>-->
+				<!--<property name="username" value="${jdbc.username}"/>-->
+				<!--<property name="password" value="${jdbc.password}"/>-->
+			<!--</dataSource>-->
+		<!--</environment>-->
+	<!--</environments>-->
+
+
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driver}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+	</bean>
+
+
+
+	<!-- Spring整合Mybatis-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 关联连接池 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- 加载sql映射文件 -->
+		<property name="mapperLocations" value="classpath:mapper/*.xml"/>
+
+		<!--<property name="typeAliasesPackage" value="cn.wy.entity" />-->
+
+		<!-- 引入插件 -->
+		<property name="plugins">
+			<array>
+				<!-- mybatis 分页插件 -->
+				<bean class="com.github.pagehelper.PageInterceptor">
+					<property name="properties">
+						<!-- helperDialect:连接数据库的类型 -->
+						<value>
+							helperDialect=mysql
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
+
+	</bean>
+
+	<!--<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">-->
+		<!--<property name="dataSource" ref="dataSource"/>-->
+	<!--</bean>-->
+
+	<!-- mybatis spring sqlSessionTemplate,使用时直接让spring注入即可 -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+	    <constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
+	</bean>
+
+	<!-- Mapper 接口的扫描 -->
+	<!-- Spring容器中Mapper接口的id名称默认为类名(首字母小写) 如:CustomerDao -> customerDao -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!--配置Mapper接口所在包路径 -->
+		<property name="basePackage" value="cn.wy.mapper"/>
+	</bean>
+
+	<!-- 事务管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	<!-- 事务通知 -->
+	<tx:advice id="txAd" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="*" isolation="DEFAULT" />
+		</tx:attributes>
+	</tx:advice>
+	<!-- 事务切面 -->
+	<aop:config>
+		<aop:pointcut expression="execution(public void cn.wy.service.impl.*.*(..))" id="pt"/>
+		<aop:advisor advice-ref="txAd" pointcut-ref="pt"/>
+	</aop:config>
+
+
+
+</beans>
