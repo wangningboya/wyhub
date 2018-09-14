@@ -1,6 +1,7 @@
 package cn.wy.service;
 
 import cn.wy.entity.Account;
+import cn.wy.entity.Page;
 import cn.wy.entity.Prize;
 
 import java.util.List;
@@ -20,8 +21,11 @@ public interface PrizeService {
     public void edit(Prize prize);
 
     //列出奖品
-    public List<Prize> getPrizeList();
+    public List<Prize> getPrizeList(Page<Prize> page);
 
+    //根据id获取奖品
     public Prize getPrizeById(String prizeId);
 
+    //获取奖品种类数量
+    public int count();
 }

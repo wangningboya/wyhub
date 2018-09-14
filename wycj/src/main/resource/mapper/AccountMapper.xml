@@ -31,7 +31,14 @@
         SELECT userAccount FROM account WHERE isDelete=0
     </select>
 
-    <select id="findAllUser" resultType="cn.wy.entity.Account">
-        SELECT * FROM account WHERE isDelete=0
+    <select id="findAllUser" parameterType="cn.wy.entity.Page" resultType="cn.wy.entity.Account">
+        SELECT *
+        FROM account
+        WHERE isDelete=0
+        limit #{offset},#{limit}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT count(*) from account WHERE isDelete=0
     </select>
 </mapper>

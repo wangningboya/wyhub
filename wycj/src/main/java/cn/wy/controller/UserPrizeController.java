@@ -147,7 +147,6 @@ public class UserPrizeController {
             @RequestParam(value="userId",defaultValue="0")String userId
     )throws Exception{
         System.out.println("根据userid获取所有获奖信息");
-
         Page<UserPrizeDto> page=new Page<UserPrizeDto>();
         page.setLimit(Integer.parseInt(limit));
         page.setOffset(Integer.parseInt(offset));
@@ -159,7 +158,6 @@ public class UserPrizeController {
         List<UserPrizeDto> userPrizesList=new ArrayList<>();
         userPrizesList=userPrizeService.findUserPrizeDtoListByUserId(page);
         page.setRows(userPrizesList);
-        System.out.println("ssssss"+userPrizeService.count(page));
         page.setTotal(userPrizeService.count(page));
 
         Map<String, Object> result=new HashMap<String, Object>();

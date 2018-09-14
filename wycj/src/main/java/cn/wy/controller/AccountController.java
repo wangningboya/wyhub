@@ -1,18 +1,22 @@
 package cn.wy.controller;
 
 import cn.wy.entity.Account;
+import cn.wy.entity.Page;
 import cn.wy.service.UserService;
 import cn.wy.util.RandomId;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class AccountController {
@@ -124,13 +128,25 @@ public class AccountController {
      */
     @RequestMapping(value = "/findAllUser")
     @ResponseBody
-    public List<Account> findAllUser(HttpServletRequest request){
-        System.out.println("**************************");
+    public Object findAllUser(
+            @RequestParam(value="limit",defaultValue="10")String limit,
+            @RequestParam(value="offset",defaultValue="0")String offset
+    ) throws Exception{
+        System.out.println("获取所有账户信息");
+
+        Page<Account> page=new Page<Account>();
+        page.setLimit(Integer.parseInt(limit));
+        page.setOffset(Integer.parseInt(offset));
+
         List<Account> accountList=new ArrayList<>();
-        accountList=userService.findAllUser();
-//        for (int i=0;i<accountList.size();i++){
-//            System.out.println(accountList.get(i).getUserAccount());
-//        }
-        return accountList;
+        accountList=userService.findAllUser(page);
+
+        page.setRows(accountList);
+        page.setTotal(userService.count());
+
+        Map<String,Object> result=new HashMap<String, Object>();
+        result.put("rows",page.getRows());
+        result.put("total",page.getTotal());
+        return result;
     }
 }

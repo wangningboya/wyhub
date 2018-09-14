@@ -4,8 +4,16 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.wy.mapper.PrizeMapper">
 
-    <select id="getPrizeList" resultType="cn.wy.entity.Prize">
-        SELECT * FROM prize WHERE isdelete="0"
+    <select id="getPrizeList" parameterType="cn.wy.entity.Page" resultType="cn.wy.entity.Prize">
+        SELECT *
+        FROM prize
+        WHERE isdelete="0"
+        <if test="params!=null">
+            <if test="params.type=='table'">
+                LIMIT #{offset},#{limit}
+            </if>
+        </if>
+
     </select>
 
     <select id="getPrizeById" resultType="cn.wy.entity.Prize">
@@ -23,5 +31,9 @@
     <update id="edit" parameterType="cn.wy.entity.Prize">
         UPDATE prize SET prizeName=#{prizeName},prizeColor=#{prizeColor},prizePro=#{prizePro} WHERE prizeId=#{prizeId}
     </update>
+
+    <select id="count" resultType="int">
+        SELECT count(*) FROM prize WHERE isDelete=0
+    </select>
 
 </mapper>

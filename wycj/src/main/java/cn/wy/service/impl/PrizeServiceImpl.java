@@ -1,6 +1,7 @@
 package cn.wy.service.impl;
 
 import cn.wy.entity.Account;
+import cn.wy.entity.Page;
 import cn.wy.entity.Prize;
 import cn.wy.mapper.PrizeMapper;
 import cn.wy.service.PrizeService;
@@ -31,12 +32,17 @@ public class PrizeServiceImpl implements PrizeService {
     }
 
     @Override
-    public List<Prize> getPrizeList() {
-        return prizeMapper.getPrizeList();
+    public List<Prize> getPrizeList(Page<Prize> page) {
+        return prizeMapper.getPrizeList(page);
     }
 
     @Override
     public Prize getPrizeById(String prizeId) {
         return prizeMapper.getPrizeById(prizeId);
+    }
+
+    @Override
+    public int count() {
+        return prizeMapper.count();
     }
 }

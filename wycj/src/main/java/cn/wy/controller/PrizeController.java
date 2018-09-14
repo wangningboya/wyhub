@@ -1,6 +1,7 @@
 package cn.wy.controller;
 
 import cn.wy.entity.Account;
+import cn.wy.entity.Page;
 import cn.wy.entity.Prize;
 import cn.wy.service.PrizeService;
 import cn.wy.service.UserService;
@@ -8,6 +9,7 @@ import cn.wy.util.RandomId;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -15,7 +17,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class PrizeController {
@@ -41,11 +45,28 @@ public class PrizeController {
     //获取奖品信息
     @RequestMapping(value = "/getPrizeList" , method = RequestMethod.POST)
     @ResponseBody
-    public List<Prize> getPrizeList(){
+    public Object getPrizeList(
+            @RequestParam(value = "limit",defaultValue = "10")String limit,
+            @RequestParam(value = "offset",defaultValue = "0")String offset,
+            @RequestParam(value = "type",defaultValue = "")String type
+    ) throws Exception{
         System.out.println("获取奖品信息");
-        List<Prize> prizeList=new ArrayList<>();
-        prizeList=prizeService.getPrizeList();
-        return prizeList;
+
+        Page<Prize> page=new Page<Prize>();
+        page.setLimit(Integer.parseInt(limit));
+        page.setOffset(Integer.parseInt(offset));
+
+        Map<String,Object> map=new HashMap<String,Object>();
+        map.put("type",type);
+        page.setParams(map);
+
+        page.setRows(prizeService.getPrizeList(page));
+        page.setTotal(prizeService.count());
+
+        Map<String,Object> result=new HashMap<String,Object>();
+        result.put("rows",page.getRows());
+        result.put("total",page.getTotal());
+        return result;
     }
 
     //通过ID获取奖品信息
@@ -68,7 +89,6 @@ public class PrizeController {
     )throws Exception{
         System.out.println("通过ID修改奖品信息");
         prize.setIsDelete("0");
-        System.out.println("sssssssssss"+prize.toString());
         prizeService.edit(prize);
         return 1;
     }

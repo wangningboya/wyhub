@@ -1,6 +1,7 @@
 package cn.wy.service;
 
 import cn.wy.entity.Account;
+import cn.wy.entity.Page;
 
 import java.util.List;
 
@@ -25,5 +26,8 @@ public interface UserService {
     public List<String> findAccount();
 
     //查找所有用户信息
-    public List<Account> findAllUser();
+    public List<Account> findAllUser(Page<Account> page);
+
+    //获取用户数量
+    public int count();
 }

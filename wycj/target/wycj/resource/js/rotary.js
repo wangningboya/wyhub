@@ -40,7 +40,7 @@ function init() {
         function (data, status) {
             if (status == "success") {
                 prizeList = new Array();
-                prizeList = data;
+                prizeList = data.rows;
 
                 //算概率总和
                 var sum = 0;

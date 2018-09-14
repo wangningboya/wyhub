@@ -1,6 +1,7 @@
 package cn.wy.service.impl;
 
 import cn.wy.entity.Account;
+import cn.wy.entity.Page;
 import cn.wy.mapper.AccountMapper;
 import cn.wy.service.UserService;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Account> findAllUser() {
-        return accountMapper.findAllUser();
+    public List<Account> findAllUser(Page<Account> page) {
+        return accountMapper.findAllUser(page);
+    }
+
+    @Override
+    public int count() {
+        return accountMapper.count();
     }
 }

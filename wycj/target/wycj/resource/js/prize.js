@@ -5,10 +5,12 @@ $(document).ready(function () {
         cache: false, // 设置为 false 禁用 AJAX 数据缓存， 默认为true
         striped: true,  //表格显示条纹，默认为false
         height:window.innerHeight-50,
-        sidePagination: 'client', // 设置为客户端分页
+        sidePagination: 'server', // 设置为服务端分页
+        // sidePagination: 'client',
+        dataField:"rows",//返回的想要放到列表上的数据
         //分页设置
         pagination: true, // 在表格底部显示分页组件，默认false
-        pageList: [10, 20], // 设置页面可以显示的数据条数
+        pageList: [10, 20, 50], // 设置页面可以显示的数据条数
         pageSize: 10, // 页面数据条数
         pageNumber: 1, // 首页页码
         //工具栏
@@ -21,13 +23,15 @@ $(document).ready(function () {
         silent: true,                       //刷新事件必须设置
 
         //参数
-        // contentType: 'application/x-www-form-urlencoded',
-        // queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
-        //     var temp={
-        //         xixi:"aafadf"
-        //     };
-        //     return temp;
-        // },
+        contentType: 'application/x-www-form-urlencoded',
+        queryParams: function (params) { // 请求服务器数据时发送的参数，可以在这里添加额外的查询参数，返回false则终止请求
+            var temp={
+                limit:params.limit,
+                offset:params.offset,
+                type:"table"
+            };
+            return temp;
+        },
 //    sortName: 'id', // 要排序的字段
 //    sortOrder: 'desc', // 排序规则
         columns: [
@@ -56,13 +60,18 @@ $(document).ready(function () {
                         '<button class="btn btn-warning btn-sm" onclick="del(\'' + row.prizeId + '\')">删除</button>';
                 }
             }
-        ]
-        // onLoadSuccess: function(){  //加载成功时执行
-        //     console.info("加载成功");
-        // },
-        // onLoadError: function(){  //加载失败时执行
-        //     console.info("加载数据失败");
-        // }
+        ],locale:'zh-CN',//中文支持,
+        responseHandler:function(res){
+            //在ajax获取到数据，渲染表格之前，修改数据源
+            console.log(res);
+            return res;
+        },
+        onLoadSuccess: function(){  //加载成功时执行
+            console.info("加载成功");
+        },
+        onLoadError: function(){  //加载失败时执行
+            console.info("加载数据失败");
+        }
 
     });
 
