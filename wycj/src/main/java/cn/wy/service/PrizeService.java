@@ -3,6 +3,7 @@ package cn.wy.service;
 import cn.wy.entity.Account;
 import cn.wy.entity.Page;
 import cn.wy.entity.Prize;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

@@ -106,17 +106,30 @@
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
+
+	<!--<context:component-scan base-package="cn.wy.controller">-->
+		<!--&lt;!&ndash;在对controller的包进行扫描时，添加如下配置，就可以支持在Controller上面加事务&ndash;&gt;-->
+		<!--<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>-->
+	<!--</context:component-scan>-->
+	<!--&lt;!&ndash;指定事务的管理器&ndash;&gt;-->
+	<!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
+
+
 	<!-- 事务通知 -->
 	<tx:advice id="txAd" transaction-manager="transactionManager">
 		<tx:attributes>
 			<tx:method name="*" isolation="DEFAULT" />
 		</tx:attributes>
 	</tx:advice>
-	<!-- 事务切面 -->
+	<!--事务切面 -->
 	<aop:config>
 		<aop:pointcut expression="execution(public void cn.wy.service.impl.*.*(..))" id="pt"/>
 		<aop:advisor advice-ref="txAd" pointcut-ref="pt"/>
 	</aop:config>
+	<!--<aop:config>-->
+		<!--<aop:pointcut expression="execution(public void cn.wy.controller.*.*(..))" id="pt"/>-->
+		<!--<aop:advisor advice-ref="txAd" pointcut-ref="pt"/>-->
+	<!--</aop:config>-->
 
 
 

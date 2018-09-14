@@ -5,11 +5,13 @@ import cn.wy.entity.Page;
 import cn.wy.mapper.AccountMapper;
 import cn.wy.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Resource

@@ -6,11 +6,13 @@ import cn.wy.entity.Prize;
 import cn.wy.mapper.PrizeMapper;
 import cn.wy.service.PrizeService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 @Service
+@Transactional
 public class PrizeServiceImpl implements PrizeService {
 
     @Resource
